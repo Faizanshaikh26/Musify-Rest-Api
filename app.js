@@ -2,6 +2,9 @@ const express = require("express");
 const app = express();
 require("./db/connection");
 const path = require("path");
+const compression = require('compression');
+app.use(compression());
+
 
 const port = process.env.PORT || 8000;
 const bodyParser = require("body-parser");
