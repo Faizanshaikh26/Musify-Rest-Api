@@ -1,7 +1,6 @@
 const express = require("express");
 const Album = require("../models/Album");
 
-
 const allAlbums = async (req, res) => {
   const {
     page = 1,
@@ -65,6 +64,7 @@ const updateAlbum = async (req, res) => {
     res.status(400).json({ message: err.message });
   }
 };
+
 const deleteAlbum = async (req, res) => {
   try {
     const album = await Album.findById(req.params.id);

@@ -5,7 +5,6 @@ const path = require("path");
 const compression = require('compression');
 app.use(compression());
 
-
 const port = process.env.PORT || 8000;
 const bodyParser = require("body-parser");
 const cors = require("cors");
@@ -28,4 +27,4 @@ app.post("/api/albums", albumsControllers.newAlbum);
 app.put("/api/:id", albumsControllers.updateAlbum);
 app.delete("/api/:id", albumsControllers.deleteAlbum);
 
-app.listen(port, () => console.log("done"));
+app.listen(port, () => console.log("Server is running on port", port));
