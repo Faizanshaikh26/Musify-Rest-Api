@@ -15,6 +15,7 @@ const albumSchema = new Schema({
     genre: String,
     albumImage: { type: String, required: true },
     songs: [songSchema],
+    bgcolor:{type:String ,required:true},
     created_at: { type: Date, default: Date.now }
 });
 
