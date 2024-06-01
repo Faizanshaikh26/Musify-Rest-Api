@@ -10,6 +10,7 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const albumsControllers = require("./Controllers/albums");
 require("dotenv").config();
+
 app.use(bodyParser.json());
 app.use("/images", express.static(path.join(__dirname, "Images")));
 app.use("/songurl", express.static(path.join(__dirname, "Songurl")));
