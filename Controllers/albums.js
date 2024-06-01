@@ -97,25 +97,60 @@ const newAlbum = async (req, res) => {
 const searchAlbums = async (req, res) => {
   try {
     const searchTerm = req.query.q;
-    const query = {};
-
-    if (searchTerm) {
-      query.$or = [
-        { title: new RegExp(searchTerm, "i") }, // Case-insensitive regex search on title
-        { description: new RegExp(searchTerm, "i") }, // Case-insensitive regex search on description
-        { genre: new RegExp(searchTerm, "i") }, // Case-insensitive regex search on genre
-        { albumImage: new RegExp(searchTerm, "i") }, // Case-insensitive regex search on albumImage
-        { "songs.title": new RegExp(searchTerm, "i") }, // Case-insensitive regex search on song titles
-        { "songs.artist": new RegExp(searchTerm, "i") }, // Case-insensitive regex search on song artists
-      ];
+    if (!searchTerm) {
+      return res.status(400).json({ message: 'Search term is required' });
     }
 
-    const albums = await Album.find(query);
+    const regex = new RegExp(searchTerm, "i"); // Case-insensitive regex search
+
+    // First, try to find albums that match the search term
+    const albumQuery = {
+      $or: [
+        { title: regex },
+        { description: regex },
+        { genre: regex },
+        { albumImage: regex }
+      ]
+    };
+
+    let albums = await Album.find(albumQuery).exec();
+
+    // If no albums are found, search for songs
+    if (albums.length === 0) {
+      const songPipeline = [
+        { $unwind: "$songs" }, // Unwind the songs array
+        { 
+          $match: { 
+            $or: [
+              { "songs.title": regex },
+              { "songs.artist": regex }
+            ]
+          } 
+        },
+        { 
+          $group: {
+            _id: "$_id",
+            title: { $first: "$title" },
+            description: { $first: "$description" },
+            genre: { $first: "$genre" },
+            albumImage: { $first: "$albumImage" },
+            songs: { $push: "$songs" },
+            bgcolor: { $first: "$bgcolor" },
+            created_at: { $first: "$created_at" }
+          }
+        }
+      ];
+
+      albums = await Album.aggregate(songPipeline).exec();
+    }
+
     res.json(albums);
   } catch (err) {
+    console.error('Error during search:', err); // Log any errors
     res.status(500).json({ message: err.message });
   }
 };
+
 
 module.exports = {
   allAlbums,
