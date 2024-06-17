@@ -98,7 +98,7 @@ const searchAlbums = async (req, res) => {
   try {
     const searchTerm = req.query.q;
     if (!searchTerm) {
-      return res.status(400).json({ message: 'Search term is required' });
+      return res.status(400).json({ message: "Search term is required" });
     }
 
     const regex = new RegExp(searchTerm, "i"); // Case-insensitive regex search
@@ -109,8 +109,8 @@ const searchAlbums = async (req, res) => {
         { title: regex },
         { description: regex },
         { genre: regex },
-        { albumImage: regex }
-      ]
+        { albumImage: regex },
+      ],
     };
 
     let albums = await Album.find(albumQuery).exec();
@@ -119,15 +119,12 @@ const searchAlbums = async (req, res) => {
     if (albums.length === 0) {
       const songPipeline = [
         { $unwind: "$songs" }, // Unwind the songs array
-        { 
-          $match: { 
-            $or: [
-              { "songs.title": regex },
-              { "songs.artist": regex }
-            ]
-          } 
+        {
+          $match: {
+            $or: [{ "songs.title": regex }, { "songs.artist": regex }],
+          },
         },
-        { 
+        {
           $group: {
             _id: "$_id",
             title: { $first: "$title" },
@@ -136,9 +133,9 @@ const searchAlbums = async (req, res) => {
             albumImage: { $first: "$albumImage" },
             songs: { $push: "$songs" },
             bgcolor: { $first: "$bgcolor" },
-            created_at: { $first: "$created_at" }
-          }
-        }
+            created_at: { $first: "$created_at" },
+          },
+        },
       ];
 
       albums = await Album.aggregate(songPipeline).exec();
@@ -146,11 +143,10 @@ const searchAlbums = async (req, res) => {
 
     res.json(albums);
   } catch (err) {
-    console.error('Error during search:', err); // Log any errors
+    console.error("Error during search:", err); // Log any errors
     res.status(500).json({ message: err.message });
   }
 };
-
 
 module.exports = {
   allAlbums,
