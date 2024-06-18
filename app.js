@@ -85,7 +85,7 @@ app.use("/images", express.static(path.join(__dirname, "Images"), { maxAge: '1d'
 app.use("/songurl", express.static(path.join(__dirname, "Songurl"), { maxAge: '1d' }));
 
 // Updated CORS configuration
-const cors = require('cors');
+
 
 app.use(cors({
   origin: true, // Allow any origin
