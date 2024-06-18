@@ -3,9 +3,6 @@ const app = express();
 require("./db/connection");
 const path = require("path");
 const compression = require('compression');
-app.use(compression());
-
-const port = process.env.PORT || 8000;
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const albumsControllers = require("./Controllers/albums");
@@ -13,7 +10,15 @@ const usersControllers = require('./Controllers/Users');
 const playlistRoutes = require('./routes/playlisRoutes');
 require("dotenv").config();
 
+const port = process.env.PORT || 8000;
+
+// Enable Gzip compression
+app.use(compression());
+
+// Body parser middleware
 app.use(bodyParser.json());
+
+// Serve static files
 app.use("/images", express.static(path.join(__dirname, "Images")));
 app.use("/songurl", express.static(path.join(__dirname, "Songurl")));
 
@@ -31,11 +36,13 @@ app.use(cors({
   credentials: true,
 }));
 
+// Error handling middleware
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).send("Something broke!");
 });
 
+// Route handlers
 app.use('/api', playlistRoutes);
 app.get("/", albumsControllers.allAlbums);
 app.get("/api/search", albumsControllers.searchAlbums);
