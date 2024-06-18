@@ -85,18 +85,14 @@ app.use("/images", express.static(path.join(__dirname, "Images"), { maxAge: '1d'
 app.use("/songurl", express.static(path.join(__dirname, "Songurl"), { maxAge: '1d' }));
 
 // Updated CORS configuration
-const allowedOrigins = ['http://localhost:5173', 'https://musifyapp1.vercel.app'];
+const cors = require('cors');
+
 app.use(cors({
-  origin: function (origin, callback) {
-    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
+  origin: true, // Allow any origin
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   credentials: true,
 }));
+
 
 // Error handling middleware
 app.use((err, req, res, next) => {
