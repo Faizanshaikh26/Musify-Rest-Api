@@ -35,11 +35,12 @@ app.use("/images", express.static(path.join(__dirname, "Images"), { maxAge: '1d'
 app.use("/songurl", express.static(path.join(__dirname, "Songurl"), { maxAge: '1d' }));
 
 // Updated CORS configuration
-app.use(cors({
-  origin: true, // Allow any origin
-  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-  credentials: true,
-}));
+// app.use(cors({
+//   origin: true, // Allow any origin
+//   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+//   credentials: true,
+// }));
+app.use(cors())
 
 // Error handling middleware
 app.use((err, req, res, next) => {
