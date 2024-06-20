@@ -17,7 +17,7 @@ app.use(compression());
 const port = process.env.PORT || 8000;
 
 // Enable trust proxy
-app.set('trust proxy', true);
+app.set('trust proxy', ['192.168.1.1', '192.168.1.2'])
 
 // Body parser middleware
 app.use(bodyParser.json());
