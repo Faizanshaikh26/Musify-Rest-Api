@@ -191,10 +191,15 @@ const allAlbums = async (req, res) => {
   if (artist) filter["songs.artist"] = artist;
 
   try {
-    const albums = await Album.find(filter)
-      .limit(Number(limit))
-      .skip((page - 1) * limit)
-      .sort({ [sortBy]: order === "asc" ? 1 : -1 });
+    // const albums = await Album.find(filter)
+    //   .limit(Number(limit))
+    //   .skip((page - 1) * limit)
+    //   .sort({ [sortBy]: order === "asc" ? 1 : -1 });
+    const albums = await Album.find(filter, { title: 1, genre: 1, albumImage: 1 }) // Only include necessary fields
+    .limit(Number(limit))
+    .skip((page - 1) * limit)
+    .sort({ [sortBy]: order === "asc" ? 1 : -1 });
+
 
     const count = await Album.countDocuments(filter);
     const response = {
