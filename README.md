@@ -77,7 +77,7 @@
 <h2 id="usage">Usage</h2>
 <p>Run the backend server with:</p>
 <pre><code>npm start</code></pre>
-<p>The server will start on <code>http://localhost:5000</code> by default, unless you have specified a different port in the <code>.env</code> file.</p>
+<p>The server will start on <code>http://localhost:8000</code> by default, unless you have specified a different port in the <code>.env</code> file.</p>
 
 <h2 id="contributing">Contributing</h2>
 <p>Contributions are welcome! Please fork the repository and submit a pull request.</p>
